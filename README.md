@@ -1,8 +1,11 @@
 # required
 maven (to install maven in debian/ubuntu: sudo apt-get install maven2)
-git https://github.com/hhachim/trivialcube.git 
-cd trivialCube
-mvn package
+
+* git https://github.com/hhachim/trivialcube.git 
+
+* cd trivialCube
+
+* mvn package
 
 # Updating input table : 
 replace the file trivialCube/src/main/resources/table.txt
