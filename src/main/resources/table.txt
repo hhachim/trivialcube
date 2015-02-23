@@ -1,0 +1,9 @@
+seller,brand,date,price
+jack,bmw,2015-02-17,20
+jack,peugeot,2015-02-02,15
+mike,bmw,2015-02-22,20
+marc,bmw,2015-02-22,91
+mike,peugeot,2015-02-15,15
+mike,opel,2015-02-18,40
+mike,bmw,2015-02-10,70
+jack,bmw,2015-02-10,91

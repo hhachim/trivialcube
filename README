@@ -1,0 +1,18 @@
+required : maven (to install maven in debian/ubuntu: sudo apt-get install maven2)
+git https://github.com/hhachim/trivialcube.git 
+cd trivialCube
+mvn package
+
+
+#all cuboids for "sum" aggregate
+Run java -jar trivialcube.jar --input table.txt --aggregate sum --aggregate-column 4
+
+#some cuboids for sum aggregate
+Run java -jar trivialcube.jar --input table.txt --aggregate sum --aggregate-column 4 --cuboids [(1,2)(3,4,5)]
+
+#for count
+Run java -jar trivialcube.jar --input table.txt --aggregate count
+
+#some cuboids for count aggregate
+Run java -jar trivialcube.jar --input table.txt --aggregate sum --aggregate-column 4 --cuboids [(1,2)(3,4,5)]
+
