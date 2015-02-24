@@ -11,7 +11,7 @@ package com.hachim.trivialCube;
  */
 public class CuboidCount extends Cuboid {
     
-    public CuboidCount(int[] dimensionIndices, String headerRow) {
+    public CuboidCount(int[] dimensionIndices, String headerRow)  throws Exception  {
         super(dimensionIndices, headerRow);
     }
     

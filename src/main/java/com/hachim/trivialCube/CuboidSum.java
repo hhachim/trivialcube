@@ -15,7 +15,7 @@ public class CuboidSum extends Cuboid {
      */
     protected int _aggregateDimensionIndice;
     
-    public CuboidSum(int[] dimensionIndices, String headerRow, int aggregateDimensionIndice) {
+    public CuboidSum(int[] dimensionIndices, String headerRow, int aggregateDimensionIndice)  throws Exception  {
         super(dimensionIndices, headerRow);
         this._aggregateDimensionIndice = aggregateDimensionIndice;
     }

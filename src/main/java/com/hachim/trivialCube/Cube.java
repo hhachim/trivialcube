@@ -21,46 +21,47 @@ public class Cube {
     protected ArrayList _dimensions;
     protected String[] _rows;
     protected int _aggregateColumnIndice;
+    protected String _outputDirectory = "/tmp/cube";
 
+    public void setOutputDirectory(String outputDirectory) {
+        this._outputDirectory = outputDirectory;
+    }
+    
     public Cube(String filePath, int nbRows) {
         //lecture du header et des rows
         getFileContent(filePath, nbRows);
 
         //calcul la liste des _dimensions
         generateDimCombinations();
-        
+
         displayDimensionIndices();
     }
-    
-    private void displayDimensionIndices(){
-         for (int i = 0; i < _dimensions.size(); i++) {
-            System.out.print("Dimension : " + (i+1) +" => ");            
+
+    private void displayDimensionIndices() {
+        for (int i = 0; i < _dimensions.size(); i++) {
+            System.out.print("Dimension : " + (i + 1) + " => ");
             int[] currentDim = (int[]) _dimensions.get(i);
             System.out.println(Arrays.toString(currentDim));
-         }
+        }
     }
 
     private void generateDimCombinations() {
-        String[] headerParts = _headerRow.split(",");       
-        System.out.println("Calculating all dimensions indices for length="+headerParts.length);
+        String[] headerParts = _headerRow.split(",");
+        System.out.println("Calculating all dimensions indices for length=" + headerParts.length);
         _dimensions = Combination.generate(headerParts.length);
     }
 
     private void getFileContent(String filePath, int nbRows) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource(filePath).getFile());
+        File file = new File(filePath);
 
         _rows = new String[nbRows - 1];//on ne compte pas le header
 
         try {
             Scanner scanner = new Scanner(file);
             _headerRow = scanner.nextLine();
-            //System.out.println(_headerRow);
-            //System.exit(0);
             int i = 0;
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                //result.append(line).append("\n");
                 _rows[i] = line;
                 i += 1;
             }
@@ -78,28 +79,32 @@ public class Cube {
     }
 
     public void run(String aggregateFunction) {
-        Cuboid c = null;
-        //-1 pour ne pas calculer la dernière dimension
-        //qui n'est rien d'autre que la table d'entrée
-        int NbCuboids = _dimensions.size() - 1;
-        for (int i = 0; i < NbCuboids; i++) {
-            int[] currentDim = (int[]) _dimensions.get(i);
+        try {
+            Cuboid c = null;
+            //-1 pour ne pas calculer la dernière dimension
+            //qui n'est rien d'autre que la table d'entrée
+            int NbCuboids = _dimensions.size() - 1;
+            for (int i = 0; i < NbCuboids; i++) {
+                int[] currentDim = (int[]) _dimensions.get(i);
 
-            if (aggregateFunction.equals("count")) {
-                c = new CuboidCount(currentDim, _headerRow);
-            } else if (aggregateFunction.equals("sum")) {
-                c = new CuboidSum(currentDim, _headerRow, _aggregateColumnIndice);
-            }
-            
-            if (c != null) {
-                int j;
-                for (j = 0; j < _rows.length; j++) {
-                    c.processRow(_rows[j]);
+                if (aggregateFunction.equals("count")) {
+                    c = new CuboidCount(currentDim, _headerRow);
+                } else if (aggregateFunction.equals("sum")) {
+                    c = new CuboidSum(currentDim, _headerRow, _aggregateColumnIndice);
                 }
 
-                c.write();
-                //  freeCuboide(c);
+                if (c != null) {
+                    int j;
+                    for (j = 0; j < _rows.length; j++) {
+                        c.processRow(_rows[j]);
+                    }
+
+                    c.write(this._outputDirectory);                   
+                    c.free();
+                }
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 

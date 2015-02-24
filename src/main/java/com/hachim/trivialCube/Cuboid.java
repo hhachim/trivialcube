@@ -5,6 +5,8 @@
  */
 package com.hachim.trivialCube;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +23,8 @@ abstract class Cuboid {
      */
     protected String _name;
     protected Map<String, Attribute> _attributes;
+    protected String _ouputFile;
+    public PrintWriter writer;
 
     /**
      * Posititions des colonnes pour le cuboid Exemple (0,2) pour les colonnes
@@ -37,20 +41,25 @@ abstract class Cuboid {
      * @param dimensionIndices position des colonnes du cuboid
      * @param headerRow ligne d'entête
      */
-    public Cuboid(int[] dimensionIndices, String headerRow) {
+    public Cuboid(int[] dimensionIndices, String headerRow) throws Exception {
         this._dimensionIndices = dimensionIndices;
         this._attributes = new HashMap<String, Attribute>();
-
         this._name = generateName(headerRow);
-        System.out.println("Calcuting cuboid " + _name + " (columns = " + Arrays.toString(_dimensionIndices) + ")");
     }
 
-    public void write() {
-
-        for (Map.Entry<String, Attribute> entry : _attributes.entrySet()) {
-            System.out.println(entry.getValue().toString());
+    public void write(String outputDirectory) {
+        try {
+            this._ouputFile = outputDirectory + "/" + this._name;
+            writer = new PrintWriter(this._ouputFile, "UTF-8");
+            System.out.println("Calcuting cuboid " + _name + " (columns = " + Arrays.toString(_dimensionIndices) + ")");
+            for (Map.Entry<String, Attribute> entry : _attributes.entrySet()) {
+                //System.out.println(entry.getValue().toString());
+                writer.println(entry.getValue().toString());
+            }
+            writer.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-
     }
 
     public long getAttributValue(String attributeName) {
@@ -73,6 +82,12 @@ abstract class Cuboid {
      */
     public void setName(String name) {
         this._name = name;
+    }
+
+    public void free() {
+        //@todo
+        //delete cuboid file in /dev/shm/cuboid_xxxx
+        //jvm free memory of this cuboid
     }
 
     /**
