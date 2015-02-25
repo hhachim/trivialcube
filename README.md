@@ -8,7 +8,7 @@ TrivialCube can compute full or partial cube with sum or count aggregate functio
 
 * Maven 
 
-(To install maven in debian/ubuntu: sudo apt-get install maven2)
+(To install maven in debian/ubuntu: `sudo apt-get install maven2`)
 
 # Install
 
@@ -26,20 +26,21 @@ TrivialCube can compute full or partial cube with sum or count aggregate functio
 java -jar target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar
 ̀```
 
+    -c,--column <arg>               (Optional) The column position (first
+                                    column position is 0) containing the
+                                    values to compute for the sum aggregate
+                                    function
+    -d,--output-dimensions <arg>    (Optional) The dimensions to compute
+                                    (defaut : all dimensions), ex
+                                    -d='1,0-1-3,3-2' to compute only theses
+                                    three dimensions
+    -f,--aggregate-function <arg>   The aggregate function to
+                                    compute(possible values : sum or count)
+    -i,--input-file <arg>           The input file containing the data to
+                                    compute
+    -o,--ouput-directory <arg>      The ouput directory to store the cube
 
-        -c,--column <arg>               (Optional) The column position (first
-                                        column position is 0) containing the
-                                        values to compute for the sum aggregate
-                                        function
-        -d,--output-dimensions <arg>    (Optional) The dimensions to compute
-                                        (defaut : all dimensions), ex
-                                        -d='1,0-1-3,3-2' to compute only theses
-                                        three dimensions
-        -f,--aggregate-function <arg>   The aggregate function to
-                                        compute(possible values : sum or count)
-        -i,--input-file <arg>           The input file containing the data to
-                                        compute
-        -o,--ouput-directory <arg>      The ouput directory to store the cube
+
 
 * All cuboids (dimensions) with sum aggregate :
 
