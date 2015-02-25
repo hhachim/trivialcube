@@ -16,7 +16,7 @@ public class Cube {
     protected ArrayList _dimensions;
     protected ArrayList _rows;
     protected int _aggregateColumnIndice;
-    protected String _outputDirectory = "/tmp/cube";
+    protected String _outputDirectory;
     protected CubeOptions _options;
 
     public Cube(String[] args) {
