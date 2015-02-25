@@ -1,26 +1,19 @@
 package com.hachim.trivialCube;
 
 /**
- * Hello world!
+ * TrivialCube : computing an OLAP Cube
  *
  */
 public class App {
-    public String inputFile;
-    public static void main(String[] args) { 
-        System.out.println("Computing cube starts...");                
-        String file = System.getProperty("file");
-        String func = System.getProperty("func");
-        String out = System.getProperty("out");
-        
-        System.out.println("Aggragate function used : " + func);
-        
-        if(func.equals("sum")) {            
-            int column =  Integer.parseInt(System.getProperty("column"));
-            System.out.println("Sum column id : " + column);
-            System.out.println("Input file path : " + file);
-            Cube c = new Cube(file, 9);  
-            c.setOutputDirectory(out);
-            c.run("sum",column);
-        }        
+
+    public static void main(String[] args) {
+        Cube c = new Cube(args);
+
+        System.out.println("Computing cube starts...");
+        System.out.println("Aggragate function used : " + c.getOptions().aggregateFunction);
+        System.out.println("Input file path : " + c.getOptions().inputFile);
+        System.out.println("Values column id : " + c.getOptions().columnValuesId);       
+        c.run();
     }
+
 }

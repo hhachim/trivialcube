@@ -30,7 +30,7 @@ public class CuboidTest
     public void testGetAndGenerateName() throws Exception {
         assertTrue(true);
         int[] dimensionIndices = new int[]{0, 2};
-        String headerRow = "vendeur,marque,date,montant";
+        String[] headerRow = {"vendeur","marque","date","montant"};
         Cuboid c = new CuboidCount(dimensionIndices, headerRow);        
         assertEquals("vendeur,date", c.getName());    
         c = new CuboidSum(dimensionIndices, headerRow,0);

@@ -28,15 +28,15 @@ public class CuboidSumTest
     
     public void testProcessRow() throws Exception {
         int[] dimensionIndices = new int[]{0, 2};
-        String headerRow = "vendeur,marque,date,montant";
+        String[] headerRow = {"vendeur","marque","date","montant"};
 
         CuboidSum c = new CuboidSum(dimensionIndices, headerRow, 3);        
-        String row1 = "jean,bmw,150217,30";  
+        String[] row1 = {"jean","bmw","150217","30"};  
         Row r = new Row(row1);
         String attributeName = r.getValuesAtIndexes(dimensionIndices);
         c.processRow(row1);
         assertEquals(c.getAttributValue(attributeName), 30);
-        String row2 = "jean,peugeot,150217,99";  
+        String[] row2 = {"jean","peugeot","150217","99"};  
         c.processRow(row2);
         assertEquals(c.getAttributValue(attributeName), 129);
     }

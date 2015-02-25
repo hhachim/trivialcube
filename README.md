@@ -2,29 +2,43 @@
 
 * Java
 
-* Maven or Download the .jar file
-
-trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar
+* Maven 
 
 (To install maven in debian/ubuntu: sudo apt-get install maven2)
 
 # Install
 
-* git https://github.com/hhachim/trivialcube.git 
+* git clone https://github.com/hhachim/trivialcube.git 
 
 * cd trivialCube
 
-* mvn package
+* mvn clean package
 
 # Run
-* Download this input file table.txt or create your own input file
 
-* with sum aggregate :
+* usage: java -jar target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar
+        -c,--column <arg>               (Optional) The column position (first
+                                        column position is 0) containing the
+                                        values to compute for the sum aggregate
+                                        function
+        -d,--output-dimensions <arg>    (Optional) The dimensions to compute
+                                        (defaut : all dimensions), ex
+                                        -d='1,0-1-3,3-2' to compute only theses
+                                        three dimensions
+        -f,--aggregate-function <arg>   The aggregate function to
+                                        compute(possible values : sum or count)
+        -i,--input-file <arg>           The input file containing the data to
+                                        compute
+        -o,--ouput-directory <arg>      The ouput directory to store the cube
 
-java -jar -Dfunc=sum -Dcolumn=3 -Dfile=/tmp/table.txt -Dout=/tmp target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar
+* All cuboids (dimensions) with sum aggregate :
+java -jar target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar -i="./samples/table.txt" -f=sum -o="/tmp" -c=3    
 
-The option -Dfunc indicates the aggregating function to process
+* All cuboids (dimensions) with count aggregate :
+java -jar target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar -i=./samples/table.txt -f=count -o=/tmp
+   
+* One specific cuboid
+java -jar target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar -i=./samples/table.txt -f=sum -o=/tmp -c=3 -d="1"
 
-The option -Dcolumn indicates column to compute sum aggregations
-
-The opiton -Dfile indicates the inpute file containing the data to compute
+* Many specific cuboids (example cuboid 0-1, and cuboid 1-3)
+java -jar target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar -i=./samples/table.txt -f=sum -o=/tmp -c=3 -d="0-1,1-3"

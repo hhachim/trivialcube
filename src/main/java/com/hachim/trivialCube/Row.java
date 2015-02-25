@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.hachim.trivialCube;
 
 import com.google.common.base.Joiner;
@@ -13,8 +8,8 @@ import com.google.common.base.Joiner;
  */
 public class Row {
     protected String[] _rowParts;
-    public Row(String row) {
-        _rowParts = row.split(",");     
+    public Row(String[] rowParts) {
+        _rowParts = rowParts;     
     }
     
     public String getValueAtIndex(int index) {

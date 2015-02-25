@@ -1,14 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.hachim.trivialCube;
 
+import au.com.bytecode.opencsv.CSVReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Scanner;
 
 /**
@@ -17,24 +16,33 @@ import java.util.Scanner;
  */
 public class Cube {
 
-    protected String _headerRow;
+    protected String[] _headerRowParts;
     protected ArrayList _dimensions;
-    protected String[] _rows;
+    protected ArrayList _rows;
     protected int _aggregateColumnIndice;
     protected String _outputDirectory = "/tmp/cube";
+    protected CubeOptions _options;
 
-    public void setOutputDirectory(String outputDirectory) {
-        this._outputDirectory = outputDirectory;
-    }
-    
-    public Cube(String filePath, int nbRows) {
+    public Cube(String[] args) {
+        _options = new CubeOptions(args);
+        _outputDirectory = _options.ouputDirectory;
+        _aggregateColumnIndice = _options.columnValuesId;
+
         //lecture du header et des rows
-        getFileContent(filePath, nbRows);
+        getFileContent(_options.inputFile);
 
         //calcul la liste des _dimensions
-        generateDimCombinations();
+        if (!_options.outputDimensions.isEmpty()) {
+            generateOutputDimensionsList(_options.outputDimensions);
+        } else {
+            generateDimCombinations();
+        }
 
         displayDimensionIndices();
+    }
+
+    public CubeOptions getOptions() {
+        return _options;
     }
 
     private void displayDimensionIndices() {
@@ -45,70 +53,97 @@ public class Cube {
         }
     }
 
-    private void generateDimCombinations() {
-        String[] headerParts = _headerRow.split(",");
-        System.out.println("Calculating all dimensions indices for length=" + headerParts.length);
-        _dimensions = Combination.generate(headerParts.length);
+    private void generateDimCombinations() {        
+        System.out.println("Calculating all dimensions indices for length=" + _headerRowParts.length);
+        _dimensions = Combination.generate(_headerRowParts.length);
+
+        //on enleve la dernière dimension (il n'a pas besoin d'être calculée)
+        //car elle est identique à la relation d'entrée (elle comprend toutes les colonnes)        
+        _dimensions.remove(_dimensions.size() - 1);
     }
 
-    private void getFileContent(String filePath, int nbRows) {
-        File file = new File(filePath);
-
-        _rows = new String[nbRows - 1];//on ne compte pas le header
-
-        try {
-            Scanner scanner = new Scanner(file);
-            _headerRow = scanner.nextLine();
-            int i = 0;
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                _rows[i] = line;
-                i += 1;
+    private void generateOutputDimensionsList(String outputDimensionsStr) {
+        String[] tmpDims = outputDimensionsStr.split(",");
+        _dimensions = new ArrayList();
+        for (int i = 0; i < tmpDims.length; i++) {
+            String[] numberStrs = tmpDims[i].split("-");
+            int[] numbers = new int[numberStrs.length];
+            for (int j = 0; j < numberStrs.length; j++) {
+                numbers[j] = Integer.parseInt(numberStrs[j]);
             }
+            Arrays.sort(numbers);
+            _dimensions.add(numbers);
+        }
+    }
 
-            scanner.close();
-
-        } catch (IOException e) {
+    private void getFileContent(String filePath) {        
+        CSVReader reader;
+        try {
+            //@todo, ',' and '"' must be given in command line
+            reader = new CSVReader(new FileReader(filePath), ',', '"');
+            _headerRowParts = reader.readNext();
+            String[] nextLine;
+            while ((nextLine = reader.readNext()) != null) {
+                _rows.add(nextLine);                
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void run(String aggregateFunction, int aggregateColumnIndice) {
-        _aggregateColumnIndice = aggregateColumnIndice;
-        run(aggregateFunction);
-    }
-
-    public void run(String aggregateFunction) {
+    public void run() {
         try {
-            Cuboid c = null;
-            //-1 pour ne pas calculer la dernière dimension
-            //qui n'est rien d'autre que la table d'entrée
-            int NbCuboids = _dimensions.size() - 1;
-            for (int i = 0; i < NbCuboids; i++) {
-                int[] currentDim = (int[]) _dimensions.get(i);
+            int nbCuboids = _dimensions.size();
 
-                if (aggregateFunction.equals("count")) {
-                    c = new CuboidCount(currentDim, _headerRow);
-                } else if (aggregateFunction.equals("sum")) {
-                    c = new CuboidSum(currentDim, _headerRow, _aggregateColumnIndice);
-                }
-
-                if (c != null) {
-                    int j;
-                    for (j = 0; j < _rows.length; j++) {
-                        c.processRow(_rows[j]);
-                    }
-
-                    c.write(this._outputDirectory);                   
-                    c.free();
-                }
+            if (_options.aggregateFunction.equals("sum")) {
+                runSum(nbCuboids);
+            } else if (_options.aggregateFunction.equals("count")) {
+                runCount(nbCuboids);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void run() {
-        run("count");
+    private void runSum(int nbCuboids) {
+        try {
+            CuboidSum c = null;
+            for (int i = 0; i < nbCuboids; i++) {
+                System.out.print("Step " + (i + 1) + "/" + nbCuboids + "\t: ");
+                int[] currentDim = (int[]) _dimensions.get(i);
+                c = new CuboidSum(currentDim, _headerRowParts, _aggregateColumnIndice);
+                computeRows(c);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void runCount(int nbCuboids) {
+        try {
+            CuboidCount c = null;
+            for (int i = 0; i < nbCuboids; i++) {
+                System.out.print("Step " + i + "/" + (nbCuboids - 1) + " : ");
+                int[] currentDim = (int[]) _dimensions.get(i);
+                c = new CuboidCount(currentDim, _headerRowParts);
+                computeRows(c);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void computeRows(Cuboid c) {
+        Iterator<String[]> it = _rows.iterator();
+        while (it.hasNext()) {
+            c.processRow(it.next());
+        }
+        c.write(this._outputDirectory);
+        //c = null;
+        //System.gc();
+        //Runtime r=Runtime.getRuntime();
+        //long mem1=r.freeMemory();
+        //r.gc();
+        //freeMemory();
     }
 }

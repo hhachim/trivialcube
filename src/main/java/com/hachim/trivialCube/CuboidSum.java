@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.hachim.trivialCube;
 
 /**
@@ -15,8 +10,8 @@ public class CuboidSum extends Cuboid {
      */
     protected int _aggregateDimensionIndice;
     
-    public CuboidSum(int[] dimensionIndices, String headerRow, int aggregateDimensionIndice)  throws Exception  {
-        super(dimensionIndices, headerRow);
+    public CuboidSum(int[] dimensionIndices, String[] headerRowParts, int aggregateDimensionIndice)  throws Exception  {
+        super(dimensionIndices, headerRowParts);
         this._aggregateDimensionIndice = aggregateDimensionIndice;
     }
     
@@ -25,8 +20,8 @@ public class CuboidSum extends Cuboid {
      * pour mettre à jour les sums
      * @param row 
      */
-    public void processRow(String row) {
-        Row r = new Row(row);
+    public void processRow(String[] rowParts) {
+        Row r = new Row(rowParts);
         String attributeName = r.getValuesAtIndexes(_dimensionIndices);
         long sum = Long.valueOf(r.getValueAtIndex(_aggregateDimensionIndice));
                 
