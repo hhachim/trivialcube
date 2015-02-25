@@ -49,7 +49,7 @@ abstract class Cuboid {
 
     public void write(String outputDirectory) {
         try {
-            this._ouputFile = outputDirectory + "/" + this._name;
+            this._ouputFile = outputDirectory + "/cuboid_" + this._name;
             writer = new PrintWriter(this._ouputFile, "UTF-8");
             System.out.println("Calcuting cuboid " + _name + " (columns = " + Arrays.toString(_dimensionIndices) + ")");
             for (Map.Entry<String, Attribute> entry : _attributes.entrySet()) {

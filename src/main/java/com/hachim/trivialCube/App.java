@@ -6,10 +6,11 @@ package com.hachim.trivialCube;
  */
 public class App {
     public String inputFile;
-    public static void main(String[] args) {
+    public static void main(String[] args) { 
         System.out.println("Computing cube starts...");                
         String file = System.getProperty("file");
         String func = System.getProperty("func");
+        String out = System.getProperty("out");
         
         System.out.println("Aggragate function used : " + func);
         
@@ -17,7 +18,8 @@ public class App {
             int column =  Integer.parseInt(System.getProperty("column"));
             System.out.println("Sum column id : " + column);
             System.out.println("Input file path : " + file);
-            Cube c = new Cube(file, 9);                        
+            Cube c = new Cube(file, 9);  
+            c.setOutputDirectory(out);
             c.run("sum",column);
         }        
     }

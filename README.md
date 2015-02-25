@@ -21,7 +21,7 @@ trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 * with sum aggregate :
 
-java -jar -Dfunc=sum -Dcolumn=3 -Dfile=/tmp/table.txt target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar
+java -jar -Dfunc=sum -Dcolumn=3 -Dfile=/tmp/table.txt -Dout=/tmp target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 The option -Dfunc indicates the aggregating function to process
 
