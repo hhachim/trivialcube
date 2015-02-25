@@ -20,7 +20,13 @@ TrivialCube can compute full or partial cube with sum or count aggregate functio
 
 # Run
 
-* usage: java -jar target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar
+* usage: 
+
+```sh
+java -jar target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar
+̀```
+
+
         -c,--column <arg>               (Optional) The column position (first
                                         column position is 0) containing the
                                         values to compute for the sum aggregate
@@ -36,13 +42,29 @@ TrivialCube can compute full or partial cube with sum or count aggregate functio
         -o,--ouput-directory <arg>      The ouput directory to store the cube
 
 * All cuboids (dimensions) with sum aggregate :
+
+```sh
 java -jar target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar -i="./samples/table.txt" -f=sum -o="/tmp" -c=3    
+```
 
 * All cuboids (dimensions) with count aggregate :
+
+```sh
 java -jar target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar -i=./samples/table.txt -f=count -o=/tmp
+```
    
 * One specific cuboid
+
+```sh
 java -jar target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar -i=./samples/table.txt -f=sum -o=/tmp -c=3 -d="1"
+```
 
 * Many specific cuboids (example cuboid 0-1, and cuboid 1-3)
+
+```sh
 java -jar target/trivialCube-1.0-SNAPSHOT-jar-with-dependencies.jar -i=./samples/table.txt -f=sum -o=/tmp -c=3 -d="0-1,1-3"
+```
+License
+----
+
+MIT
