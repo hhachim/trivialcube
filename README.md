@@ -1,3 +1,7 @@
+# Introduction
+
+TrivialCube can compute full or partial cube with sum or count aggregate function.
+
 # required
 
 * Java

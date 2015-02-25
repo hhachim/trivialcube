@@ -1,14 +1,10 @@
 package com.hachim.trivialCube;
 
 import au.com.bytecode.opencsv.CSVReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Scanner;
 
 /**
  *
@@ -32,7 +28,7 @@ public class Cube {
         getFileContent(_options.inputFile);
 
         //calcul la liste des _dimensions
-        if (!_options.outputDimensions.isEmpty()) {
+        if (_options.outputDimensions != null) {
             generateOutputDimensionsList(_options.outputDimensions);
         } else {
             generateDimCombinations();
@@ -79,6 +75,7 @@ public class Cube {
     private void getFileContent(String filePath) {        
         CSVReader reader;
         try {
+            _rows = new ArrayList();
             //@todo, ',' and '"' must be given in command line
             reader = new CSVReader(new FileReader(filePath), ',', '"');
             _headerRowParts = reader.readNext();
