@@ -2,6 +2,8 @@
 
 TrivialCube can compute full or partial cube with sum or count aggregate function.
 
+The imput file must have at most 9 columns
+
 # required
 
 * Java
@@ -14,7 +16,7 @@ TrivialCube can compute full or partial cube with sum or count aggregate functio
 
 * git clone https://github.com/hhachim/trivialcube.git 
 
-* cd trivialCube
+* cd trivialcube
 
 * mvn clean package
 
